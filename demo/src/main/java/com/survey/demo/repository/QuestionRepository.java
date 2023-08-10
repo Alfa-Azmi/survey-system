@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Set;
 
-public interface QuestionRepository extends MongoRepository<Question,String> {
+public interface QuestionRepository extends MongoRepository<Question,Integer> {
 
     Set<Question> findBySurvey(Survey survey);
 }

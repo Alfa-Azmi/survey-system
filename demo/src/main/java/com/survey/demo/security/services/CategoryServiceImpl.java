@@ -11,8 +11,12 @@ import java.util.Set;
 public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategorySequenceGenerator categorySequenceGenerator;
     @Override
     public Category addCategory(Category category) {
+        category.setCid(categorySequenceGenerator.getSequenceNumber((Category.SEQUENCE_NAME)));
         return this.categoryRepository.save(category);
     }
 
@@ -27,12 +31,12 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category getCategory(String categoryId) {
+    public Category getCategory(int categoryId) {
         return this.categoryRepository.findById(categoryId).get();
     }
 
     @Override
-    public void deleteCategory(String categoryId) {
+    public void deleteCategory(int categoryId) {
          Category category= new Category();
          category.setCid(categoryId);
         this.categoryRepository.delete(category);

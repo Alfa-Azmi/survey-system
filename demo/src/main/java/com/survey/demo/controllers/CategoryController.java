@@ -24,7 +24,7 @@ public class CategoryController {
     }
     //get category
     @GetMapping("/{categoryId}")
-    public Category getCategory(@PathVariable("categoryId") String categoryId)
+    public Category getCategory(@PathVariable("categoryId") int categoryId)
     {
         return this.categoryService.getCategory(categoryId);
     }
@@ -44,7 +44,7 @@ public class CategoryController {
 
     //delete category
     @DeleteMapping("/{categoryId}")
-    public void deleteCategory(@PathVariable("categoryId") String categoryId)
+    public void deleteCategory(@PathVariable("categoryId") int categoryId)
     {
         this.categoryService.deleteCategory(categoryId);
     }

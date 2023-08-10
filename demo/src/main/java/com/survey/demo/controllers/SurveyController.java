@@ -1,5 +1,6 @@
 package com.survey.demo.controllers;
 
+import com.survey.demo.models.surveys.Category;
 import com.survey.demo.models.surveys.Survey;
 import com.survey.demo.security.services.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class SurveyController {
     @PostMapping("/")
     public ResponseEntity<Survey> add(@RequestBody Survey survey)
     {
+        //Category category1 = this.categoryService.addCategory(category);
+
         return ResponseEntity.ok(this.surveyService.addSurvey(survey));
     }
 
@@ -36,7 +39,7 @@ public class SurveyController {
 
     //get single survey
     @GetMapping("/{sid}")
-    public Survey survey(@PathVariable("sid") String sid)
+    public Survey survey(@PathVariable("sid") int sid)
     {
         return this.surveyService.getSurvey(sid);
     }
@@ -44,7 +47,7 @@ public class SurveyController {
     //delete the survey
 
     @DeleteMapping("/{sid}")
-    public void delete(@PathVariable("sid")String sid)
+    public void delete(@PathVariable("sid")int sid)
     {
         this.surveyService.deleteSurvey(sid);
     }

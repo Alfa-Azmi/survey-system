@@ -39,7 +39,7 @@ public class QuestionController {
 
     //get all question of any survey
     @GetMapping("/survey/{sid}")
-    public ResponseEntity<?> getQuestionsOfSurvey(@PathVariable("sid")String sid)
+    public ResponseEntity<?> getQuestionsOfSurvey(@PathVariable("sid")int sid)
     {
         Survey survey = new Survey();
         survey.setSId(sid);
@@ -62,7 +62,7 @@ public class QuestionController {
     }
 
     @GetMapping("/survey/all/{sid}")
-    public ResponseEntity<?> getQuestionsOfSurveyAdmin(@PathVariable("sid")String sid)
+    public ResponseEntity<?> getQuestionsOfSurveyAdmin(@PathVariable("sid")int sid)
     {
         Survey survey = new Survey();
         survey.setSId(sid);
@@ -73,13 +73,13 @@ public class QuestionController {
 
     //get single question
     @GetMapping("/{quesId}")
-    public Question get(@PathVariable("quesId") String quesId)
+    public Question get(@PathVariable("quesId") int quesId)
     {
         return this.service.getQuestion(quesId);
     }
     //delete question
     @DeleteMapping("/{quesId}")
-    public void delete(@PathVariable("quesId") String quesId)
+    public void delete(@PathVariable("quesId") int quesId)
     {
         this.service.deleteQuestion(quesId);
     }

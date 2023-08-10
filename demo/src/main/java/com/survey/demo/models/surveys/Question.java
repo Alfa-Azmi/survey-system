@@ -1,6 +1,7 @@
 package com.survey.demo.models.surveys;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "question")
 public class Question {
-
+    @Transient
+    public static String SEQUENCE_NAME = "question_sequence";
     @Id
-    private String quesId;
+    private int quesId;
     private String content;
     private String image;
     private String option1;

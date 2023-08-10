@@ -10,10 +10,10 @@ public interface QuestionService {
     public Question addQuestion(Question question);
     public Question updateQuestion(Question question);
     public Set<Question> getQuestions();
-    public Question getQuestion(String questionId);
+    public Question getQuestion(int questionId);
 
     public Set<Question> getQuestionsOfSurvey(Survey survey);
 
-    public void deleteQuestion(String quesId);
+    public void deleteQuestion(int quesId);
 
 }

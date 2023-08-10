@@ -8,8 +8,8 @@ public interface CategoryService {
     public Category addCategory(Category category);
     public Category updateCategory(Category category);
     public Set<Category> getCategories();
-    public Category getCategory(String categoryId) ;//categoryId
+    public Category getCategory(int categoryId) ;//categoryId
 
-    public void deleteCategory(String categoryId);
+    public void deleteCategory(int categoryId);
 
 }

@@ -10,6 +10,6 @@ public interface SurveyService {
     public Survey updateSurvey(Survey survey);
 
     public Set<Survey> getSurveys();
-    public Survey getSurvey(String surveyId);
-    public void deleteSurvey(String surveyId);
+    public Survey getSurvey(int surveyId);
+    public void deleteSurvey(int surveyId);
 }

@@ -13,8 +13,13 @@ import java.util.Set;
 public class QuestionServiceImpl implements QuestionService{
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private QuestionSequenceGenerator questionSequenceGenerator;
     @Override
     public Question addQuestion(Question question) {
+        //survey.setSId(surveySequenceGenerator.getSequenceNumber((Survey.SEQUENCE_NAME)));
+        question.setQuesId(questionSequenceGenerator.getSequenceNumber((Question.SEQUENCE_NAME)));
         return this.questionRepository.save(question);
     }
 
@@ -29,7 +34,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Question getQuestion(String questionId) {
+    public Question getQuestion(int questionId) {
         return this.questionRepository.findById(questionId).get();
     }
 
@@ -39,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public void deleteQuestion(String quesId) {
+    public void deleteQuestion(int quesId) {
         Question question = new Question();
         question.setQuesId(quesId);
         this.questionRepository.delete(question);
