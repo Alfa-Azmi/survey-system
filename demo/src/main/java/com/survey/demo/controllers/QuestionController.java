@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -44,20 +41,27 @@ public class QuestionController {
         Survey survey = new Survey();
         survey.setSId(sid);
         Set<Question> questionsOfSurvey = this.service.getQuestionsOfSurvey(survey);
+        for (Question question : questionsOfSurvey) {
+            question.setAnswer("");
+        }
         return ResponseEntity.ok(questionsOfSurvey);
 
 
-//        Survey survey= this.surveyService.getSurvey(sid);
+//        Survey survey = this.surveyService.getSurvey(sid);
 //        Set<Question> questions = survey.getQuestions();
 //
-//        List list = new ArrayList(questions);
-//        if(list.size()>Integer.parseInt(survey.getNumberOfQuestions()))
-//        {
-//            list=list.subList(0,Integer.parseInt(survey.getNumberOfQuestions()+1));
-//
+//        List<Question> list = new ArrayList<>(questions);
+//        if (list.size() > Integer.parseInt(survey.getNumberOfQuestions())) {
+//            list = list.subList(0, Math.min(list.size(), Integer.parseInt(survey.getNumberOfQuestions())));
 //        }
+//
+//        list.forEach((q) -> {
+//            q.setAnswer("");
+//        });
+//
 //        Collections.shuffle(list);
 //        return ResponseEntity.ok(list);
+//
 
     }
 
@@ -84,4 +88,38 @@ public class QuestionController {
         this.service.deleteQuestion(quesId);
     }
 
+    //eval survey
+    @PostMapping("/eval-survey")
+
+    public ResponseEntity<?> evalSurvey(@RequestBody List<Question> questions)
+    {
+        System.out.println(questions);
+        double marksGot=0;
+        int correctAnswers=0;
+        int attempted=0;
+
+        for(Question q:questions){
+            //System.out.println(q.getGivenAnswer());
+            //single questions
+            Question question = this.service.get(q.getQuesId());
+            if(question.getAnswer().equals(q.getGivenAnswer()))
+            {
+                //correct
+                correctAnswers++;
+
+                double marksSingle= Double.parseDouble(questions.get(0).getSurvey().getMaxMarks())/questions.size();
+                   marksGot += marksSingle;
+
+                //    let marksSingle =this.questions[0].survey.maxMarks/this.questions.length;
+
+
+            } if (q.getGivenAnswer()!=null  )
+            {
+                attempted++;
+            }
+        }
+
+        Map<String, Object> map = Map.of("marksGot",marksGot,"correctAnswers",correctAnswers,"attempted",attempted);
+        return ResponseEntity.ok(map);
+    }
 }

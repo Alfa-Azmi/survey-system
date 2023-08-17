@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -47,4 +48,22 @@ public class SurveyServiceImpl implements  SurveyService{
         //this.surveyRepository.delete(survey);
         this.surveyRepository.deleteById(surveyId);
     }
+
+    @Override
+    public List<Survey> getSurveysOfCategory(Category category) {
+        return this.surveyRepository.findBycategory(category);
+    }
+
+    //get Active Surveys
+    @Override
+    public List<Survey> getActiveSurveys() {
+        return this.surveyRepository.findByActive(true);
+    }
+
+    @Override
+    public List<Survey> getActiveSurveysOfCategory(Category c) {
+        return this.surveyRepository.findByCategoryAndActive(c,true);
+    }
+
+
 }

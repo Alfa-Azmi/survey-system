@@ -8,6 +8,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/survey")
@@ -50,6 +52,30 @@ public class SurveyController {
     public void delete(@PathVariable("sid")int sid)
     {
         this.surveyService.deleteSurvey(sid);
+    }
+
+    @GetMapping("/category/{cid}")
+    public List<Survey> getSurveysOfCategory(@PathVariable("cid") int cid)
+    {
+        Category category =new Category();
+        category.setCid(cid);
+       return this.surveyService.getSurveysOfCategory(category);
+    }
+
+    //get active surveys
+    @GetMapping("/active")
+    public List<Survey> getActiveSurveys()
+    {
+        return this.surveyService.getActiveSurveys();
+    }
+
+    //get active surveys of category
+    @GetMapping("/category/active/{cid}")
+    public List<Survey> getActiveSurveys(@PathVariable("cid") int cid)
+    {
+        Category category = new Category();
+        category.setCid(cid);
+        return this.surveyService.getActiveSurveysOfCategory(category);
     }
 
 }

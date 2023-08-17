@@ -8,9 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+//@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/category")
 //@CrossOrigin("*")
-//@PreAuthorize("hasRole('ADMIN')")
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CategoryController {
     @Autowired
