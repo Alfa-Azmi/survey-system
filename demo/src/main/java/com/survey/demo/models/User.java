@@ -1,8 +1,12 @@
 package com.survey.demo.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.survey.demo.models.surveys.Result;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -56,6 +60,17 @@ public class User {
 
     @DBRef
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @DBRef
+    private List<Result> results=new ArrayList<>();
+
+    public List<Result> getResults() {
+        return results;
+    }
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
 
 
 

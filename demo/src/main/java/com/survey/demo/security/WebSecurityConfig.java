@@ -91,6 +91,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                         requestMatchers("/category/**").permitAll().
                         requestMatchers("/survey/**").permitAll().
                         requestMatchers("/question/**").permitAll().
+                        requestMatchers("/result/**").permitAll().
                         requestMatchers("/api/test/**")
                         .permitAll().anyRequest().authenticated());
 

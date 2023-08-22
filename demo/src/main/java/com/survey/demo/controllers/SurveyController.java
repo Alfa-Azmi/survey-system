@@ -6,6 +6,7 @@ import com.survey.demo.security.services.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,11 +14,14 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/survey")
+
 public class SurveyController {
     @Autowired
     private SurveyService surveyService;
 
     //add survey service
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Survey> add(@RequestBody Survey survey)
     {
@@ -27,6 +31,7 @@ public class SurveyController {
     }
 
     //update survey
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/")
     public ResponseEntity<Survey> update(@RequestBody Survey survey)
     {
@@ -47,7 +52,7 @@ public class SurveyController {
     }
 
     //delete the survey
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{sid}")
     public void delete(@PathVariable("sid")int sid)
     {

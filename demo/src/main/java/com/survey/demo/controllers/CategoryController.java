@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/category")
 //@CrossOrigin("*")
 
@@ -18,6 +17,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     //add category
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Category> addCategory(@RequestBody Category category){
          Category category1 = this.categoryService.addCategory(category);
@@ -37,6 +38,7 @@ public class CategoryController {
     }
 
     //update category
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/")
     public Category updateCategory(@RequestBody Category category)
     {
@@ -44,6 +46,7 @@ public class CategoryController {
     }
 
     //delete category
+   @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public void deleteCategory(@PathVariable("categoryId") int categoryId)
     {

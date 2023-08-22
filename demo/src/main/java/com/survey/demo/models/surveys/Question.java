@@ -29,6 +29,9 @@ public class Question {
     private String answer;
     @Transient
     private String givenAnswer;
+
+    @Transient
+    private double maxMarks;
     //@ManyToOne(fetch = FetchType.EAGER)
     @DBRef// Use DBRef to create a reference to the Survey document
     private Survey survey;

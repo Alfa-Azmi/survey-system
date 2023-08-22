@@ -1,13 +1,16 @@
 package com.survey.demo.controllers;
 
 import com.survey.demo.models.surveys.Question;
+import com.survey.demo.models.surveys.Result;
 import com.survey.demo.models.surveys.Survey;
-import com.survey.demo.security.services.QuestionService;
-import com.survey.demo.security.services.SurveyService;
+import com.survey.demo.security.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -20,14 +23,19 @@ public class QuestionController {
     @Autowired
     private SurveyService surveyService;
 
+    @Autowired
+    private ResultServiceImpl resultService;
+
     //add question
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Question> add(@RequestBody Question question)
     {
         return ResponseEntity.ok(this.service.addQuestion(question));
     }
 
-    //update teh question
+    //update the question
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/")
     public ResponseEntity<Question> update(@RequestBody Question question)
     {
@@ -88,15 +96,22 @@ public class QuestionController {
         this.service.deleteQuestion(quesId);
     }
 
-    //eval survey
     @PostMapping("/eval-survey")
+    public ResponseEntity<?> evalSurvey(@RequestBody List<Question> questions) {
+        int attempted = 0;
+        int correctAnswers = 0;
+        double marksGot = 0;
 
-    public ResponseEntity<?> evalSurvey(@RequestBody List<Question> questions)
-    {
-        System.out.println(questions);
-        double marksGot=0;
-        int correctAnswers=0;
-        int attempted=0;
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = userDetails.getId();
+
+        int surveyId = 0;
+
+        // Assuming you can somehow get the surveyId from your question or survey data
+//        Survey survey = new Survey();
+//        int surveyId = surveyService.getActiveSurveys().lastIndexOf();// Replace this with your logic
+        //surveyId = q.getSurvey().getSId(); // Use the survey ID from the question
+
 
         for(Question q:questions){
             //System.out.println(q.getGivenAnswer());
@@ -108,18 +123,51 @@ public class QuestionController {
                 correctAnswers++;
 
                 double marksSingle= Double.parseDouble(questions.get(0).getSurvey().getMaxMarks())/questions.size();
-                   marksGot += marksSingle;
+                marksGot += marksSingle;
 
                 //    let marksSingle =this.questions[0].survey.maxMarks/this.questions.length;
-
+                //surveyId = q.getSurvey().getSId();
 
             } if (q.getGivenAnswer()!=null  )
             {
                 attempted++;
             }
+
+            surveyId = q.getSurvey().getSId();
+
         }
 
-        Map<String, Object> map = Map.of("marksGot",marksGot,"correctAnswers",correctAnswers,"attempted",attempted);
-        return ResponseEntity.ok(map);
+        // Create Result instance and populate it
+        Result result = new Result(
+                surveyId, // Replace with actual survey ID
+                userId, // Replace with actual user ID
+                attempted,
+                correctAnswers,
+                marksGot,
+                LocalDateTime.now()
+        );
+
+        // Save result using the injected resultService
+        Result savedResult = resultService.addResult(result);
+
+        // Prepare response
+        Map<String, Object> response = Map.of(
+                "marksGot", savedResult.getMarksScored(),
+                "correctAnswers", savedResult.getCorrectAns(),
+                "attempted", savedResult.getQAttempted()
+        );
+
+        return ResponseEntity.ok(response);
     }
+
+//    private double calculateMarksForQuestion(Question question) {
+//        // Add your custom logic to calculate marks for a question
+//        // For example, you can use question.getMaxMarks() to get max marks for the question
+//        // and apply some formula based on whether the answer is correct or not.
+//        // Return the calculated marks for this question.
+//        return question.getMaxMarks(); // Return max marks for simplicity in this example
+//    }
 }
+
+
+

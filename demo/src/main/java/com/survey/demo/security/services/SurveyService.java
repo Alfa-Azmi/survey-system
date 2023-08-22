@@ -19,4 +19,6 @@ public interface SurveyService {
     public List<Survey> getActiveSurveys();
     public List<Survey> getActiveSurveysOfCategory(Category c);
 
+
+
 }

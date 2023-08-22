@@ -6,7 +6,9 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,17 @@ public class Survey {
     @JsonIgnore
     //@DBRef
     private Set<Question> questions = new HashSet<>();
+
+    @JsonIgnore
+    @DBRef
+    private List<Result> results=new ArrayList<>();
+
+    public List<Result> getResults() {
+        return results;
+    }
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
 
 
 
