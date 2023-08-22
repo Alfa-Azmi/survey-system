@@ -15,7 +15,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/question")
+@RequestMapping("/api/auth/question")
 public class QuestionController {
     @Autowired
     private QuestionService service;

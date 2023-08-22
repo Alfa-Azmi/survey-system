@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/auth/category")
 //@CrossOrigin("*")
 
 @CrossOrigin(origins = "*", maxAge = 3600)

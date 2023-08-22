@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/result")
+@RequestMapping("/api/auth/result")
 @CrossOrigin("*")
 public class ResultController {
 
