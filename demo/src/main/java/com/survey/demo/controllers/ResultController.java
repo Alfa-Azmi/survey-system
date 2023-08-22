@@ -7,13 +7,18 @@ import com.survey.demo.security.services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth/result")
+@RequestMapping("/api/result")
 @CrossOrigin("*")
 public class ResultController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResultController.class);
 
     @Autowired
     private ResultService resultservice;

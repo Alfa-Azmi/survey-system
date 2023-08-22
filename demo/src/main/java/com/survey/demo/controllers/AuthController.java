@@ -34,6 +34,8 @@ import com.survey.demo.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -54,7 +56,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        //logger.info("The /signin endpoint has been reached");
+        logger.info("The /signin endpoint has been reached");
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -66,7 +68,10 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        //logger.info("User '{}' successfully authenticated.", userDetails.getUsername());
+
+        logger.info("User {} has successfully logged in", loginRequest.getUsername());
+        logger.info("Token successfully generated");
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
@@ -79,13 +84,16 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        logger.info("The /signup endpoint has been reached");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+            logger.error("Username is already taken");
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            logger.error("Email is already in use");
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -100,12 +108,15 @@ public class AuthController {
                 signUpRequest.getPhone()
                 );
 
+        logger.info("Password has been encoded");
+
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            logger.info("The user has been assigned the role of ROLE_USER");
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
@@ -113,25 +124,25 @@ public class AuthController {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        logger.info("The user has been assigned the role of ADMIN");
                         roles.add(adminRole);
 
                         break;
-//                    case "mod":
-//                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
-//
-//                        break;
+
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        logger.info("The user has been assigned the role of ROLE_USER");
                         roles.add(userRole);
                 }
             });
         }
         user.setId(service.getSequenceNumber(User.SEQUENCE_NAME));
         user.setRoles(roles);
+        logger.info("All roles have been assigned to the user");
         userRepository.save(user);
+        logger.info("User successfully saved to the database");
+        logger.info("User registered successfully!");
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

@@ -9,14 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/question")
+@RequestMapping("/api/question")
 public class QuestionController {
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     @Autowired
     private QuestionService service;
 
@@ -31,6 +35,7 @@ public class QuestionController {
     @PostMapping("/")
     public ResponseEntity<Question> add(@RequestBody Question question)
     {
+        logger.info("Add question endpoint reached.");
         return ResponseEntity.ok(this.service.addQuestion(question));
     }
 
@@ -39,6 +44,7 @@ public class QuestionController {
     @PutMapping("/")
     public ResponseEntity<Question> update(@RequestBody Question question)
     {
+        logger.info("Update question endpoint reached. Question ID: {}", question.getQuesId());
         return ResponseEntity.ok(this.service.updateQuestion(question));
     }
 
@@ -46,6 +52,7 @@ public class QuestionController {
     @GetMapping("/survey/{sid}")
     public ResponseEntity<?> getQuestionsOfSurvey(@PathVariable("sid")int sid)
     {
+        logger.info("Get questions of survey endpoint reached. Survey ID: {}", sid);
         Survey survey = new Survey();
         survey.setSId(sid);
         Set<Question> questionsOfSurvey = this.service.getQuestionsOfSurvey(survey);
@@ -76,6 +83,7 @@ public class QuestionController {
     @GetMapping("/survey/all/{sid}")
     public ResponseEntity<?> getQuestionsOfSurveyAdmin(@PathVariable("sid")int sid)
     {
+        logger.info("Get all questions of survey endpoint reached.");
         Survey survey = new Survey();
         survey.setSId(sid);
         Set<Question> questionsOfSurvey = this.service.getQuestionsOfSurvey(survey);
@@ -87,17 +95,20 @@ public class QuestionController {
     @GetMapping("/{quesId}")
     public Question get(@PathVariable("quesId") int quesId)
     {
+        logger.info("Get a single question of survey endpoint reached.Question ID: {}", quesId);
         return this.service.getQuestion(quesId);
     }
     //delete question
     @DeleteMapping("/{quesId}")
     public void delete(@PathVariable("quesId") int quesId)
     {
+       logger.info("Delete question endpoint reached. Question ID: {}", quesId);
         this.service.deleteQuestion(quesId);
     }
 
     @PostMapping("/eval-survey")
     public ResponseEntity<?> evalSurvey(@RequestBody List<Question> questions) {
+        logger.info("Evaluation of survey endpoint reached");
         int attempted = 0;
         int correctAnswers = 0;
         double marksGot = 0;
