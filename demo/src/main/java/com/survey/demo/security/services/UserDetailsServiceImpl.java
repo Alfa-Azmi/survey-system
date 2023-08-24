@@ -1,5 +1,6 @@
 package com.survey.demo.security.services;
 
+import com.survey.demo.models.surveys.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.survey.demo.models.User;
 import com.survey.demo.repository.UserRepository;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -24,4 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
+
+//    @Override
+//    public Set<Survey> getUsers() {
+//        return new HashSet<>(this.surveyRepository.findAll());
+//    }
 }

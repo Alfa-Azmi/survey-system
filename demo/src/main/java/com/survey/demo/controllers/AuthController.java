@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.survey.demo.security.services.SequenceGeneratorService;
+import com.survey.demo.security.services.SurveyService;
+import com.survey.demo.security.services.UserService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SequenceGeneratorService service;
@@ -145,6 +150,13 @@ public class AuthController {
         logger.info("User registered successfully!");
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    //get user
+    @GetMapping("/")
+    public ResponseEntity<?> users(){
+        logger.info("Get all the users endpoint reached.");
+        return ResponseEntity.ok(this.userService.getUsers());
     }
 }
 

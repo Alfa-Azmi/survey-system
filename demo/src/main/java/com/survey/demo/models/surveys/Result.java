@@ -22,17 +22,19 @@ public class Result {
 
     private int surveyID;
 
+
 //    @DBRef
 //    private Survey survey;
 
     private int userID;
+
 
     private int qAttempted;
     private int correctAns;
     private double marksScored;
     private LocalDateTime submitDateTime;
 
-    public Result(int surveyID, int userID, int qAttempted, int correctAns, double marksScored, LocalDateTime submitDateTime) {
+    public Result(int surveyID, int userID,  int qAttempted, int correctAns, double marksScored, LocalDateTime submitDateTime) {
         this.surveyID = surveyID;
         this.userID = userID;
         this.qAttempted = qAttempted;

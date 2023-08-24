@@ -117,6 +117,7 @@ public class QuestionController {
         int userId = userDetails.getId();
 
         int surveyId = 0;
+        String surveyTitle = "";
 
         // Assuming you can somehow get the surveyId from your question or survey data
 //        Survey survey = new Survey();
@@ -151,7 +152,7 @@ public class QuestionController {
         // Create Result instance and populate it
         Result result = new Result(
                 surveyId, // Replace with actual survey ID
-                userId, // Replace with actual user ID
+                userId, // Replace with actual user ID,
                 attempted,
                 correctAnswers,
                 marksGot,

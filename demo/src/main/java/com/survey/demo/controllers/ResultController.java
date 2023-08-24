@@ -23,9 +23,12 @@ public class ResultController {
     @Autowired
     private ResultService resultservice;
 
+
+    //Add result
     @PostMapping("/")
     public ResponseEntity<?> addResult(@RequestBody Result result)
     {
+        logger.info("Add result endpoint reached");
         return ResponseEntity.ok(this.resultservice.addResult(result));
     }
 
@@ -47,9 +50,12 @@ public class ResultController {
 //
 //    }
 //
+
+    //Get Result By Survey
     @GetMapping("/survey/{surveyID}")
     public List<Result> getResultBySurvey(@PathVariable("surveyID") int surveyID)
     {
+        logger.info("Get result by survey endpoint reached.");
         return resultservice.getBySurveyID(surveyID);
 
     }
@@ -58,6 +64,7 @@ public class ResultController {
     public List<Result> getResultByUserIDAndSurveyID(@PathVariable("userID") int userID,
                                                  @PathVariable("surveyID") int surveyID)
     {
+        logger.info("Get result by user and survey endpoint reached");
         return resultservice.getByUserIDAndSurveyID(userID,surveyID);
     }
 
@@ -65,6 +72,7 @@ public class ResultController {
     @GetMapping("/user/{userID}")
     public List<Result> getResultByUserID(@PathVariable("userID") int userID)
     {
+        logger.info("Get result by user endpoint reached");
         return resultservice.getByUserID(userID);
 
     }
