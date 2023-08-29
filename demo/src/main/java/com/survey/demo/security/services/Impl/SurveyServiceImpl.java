@@ -1,9 +1,14 @@
-package com.survey.demo.security.services;
+package com.survey.demo.security.services.Impl;
 
+import com.survey.demo.exceptions.CategoryNotFoundException;
+import com.survey.demo.exceptions.SurveyNotFoundException;
 import com.survey.demo.models.surveys.Category;
 import com.survey.demo.models.surveys.Survey;
 import com.survey.demo.repository.SurveyRepository;
+import com.survey.demo.security.services.SequenceGeneratorService;
+import com.survey.demo.security.services.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -11,17 +16,19 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class SurveyServiceImpl implements  SurveyService{
+public class SurveyServiceImpl implements SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
-    @Autowired
-    private SurveySequenceGenerator surveySequenceGenerator;
+//    @Autowired
+//    private SurveySequenceGenerator surveySequenceGenerator;
 
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
     @Override
     public Survey addSurvey(Survey survey) {
 
-        survey.setSId(surveySequenceGenerator.getSequenceNumber((Survey.SEQUENCE_NAME)));
+        survey.setSId(sequenceGeneratorService.getSequenceNumber((Survey.SEQUENCE_NAME)));
         return this.surveyRepository.save(survey);
     }
 
@@ -36,18 +43,25 @@ public class SurveyServiceImpl implements  SurveyService{
     }
 
     @Override
-    public Survey getSurvey(int surveyId) {
-        return this.surveyRepository.findById(surveyId).get();
+    public Survey getSurvey(int surveyId) throws SurveyNotFoundException {
+        return this.surveyRepository.findById(surveyId).orElseThrow(() -> new SurveyNotFoundException("Survey Not Found with surveyId: " + surveyId));
     }
 
     @Override
     public void deleteSurvey(int surveyId) {
-//        Survey survey = new Survey();
-//        survey.setSId(surveyId);
 
-        //this.surveyRepository.delete(survey);
         this.surveyRepository.deleteById(surveyId);
     }
+
+//    @Override
+//    public void deleteSurvey(int surveyId) throws SurveyNotFoundException {
+//        if (!surveyRepository.existsById(surveyId)) {
+//            throw new SurveyNotFoundException("Survey Not Found with surveyId: " + surveyId);
+//        }
+//
+//        surveyRepository.deleteById(surveyId);
+//    }
+
 
     @Override
     public List<Survey> getSurveysOfCategory(Category category) {

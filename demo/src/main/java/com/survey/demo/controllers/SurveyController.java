@@ -1,9 +1,11 @@
 package com.survey.demo.controllers;
 
+import com.survey.demo.exceptions.SurveyNotFoundException;
 import com.survey.demo.models.surveys.Category;
 import com.survey.demo.models.surveys.Survey;
 import com.survey.demo.security.services.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,13 @@ public class SurveyController {
 
     //add survey service
 
+
+    // Exception handling for addCategory
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        logger.error("An exception occurred: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+    }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Survey> add(@RequestBody Survey survey)
@@ -50,12 +59,24 @@ public class SurveyController {
         return ResponseEntity.ok(this.surveyService.getSurveys());
     }
 
-    //get single survey
+//    //get single survey
+//    @GetMapping("/{sid}")
+//    public Survey survey(@PathVariable("sid") int sid)
+//    {
+//        logger.info("Get all the survey endpoint reached.");
+//        return this.surveyService.getSurvey(sid);
+//    }
+
     @GetMapping("/{sid}")
-    public Survey survey(@PathVariable("sid") int sid)
-    {
-        logger.info("Get all the survey endpoint reached.");
-        return this.surveyService.getSurvey(sid);
+    public ResponseEntity<?> survey(@PathVariable("sid") int sid) {
+        try {
+            logger.info("Get single survey endpoint reached. Survey ID: {}", sid);
+            Survey survey = this.surveyService.getSurvey(sid);
+            return ResponseEntity.ok(survey);
+        } catch (Exception e) {
+            logger.error("Error fetching survey: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     //delete the survey
@@ -66,6 +87,22 @@ public class SurveyController {
         logger.info("Delete survey endpoint reached.");
         this.surveyService.deleteSurvey(sid);
     }
+
+
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @DeleteMapping("/{sid}")
+//    public ResponseEntity<?> delete(@PathVariable("sid") int sid) {
+//        try {
+//            logger.info("Delete survey endpoint reached.");
+//            this.surveyService.deleteSurvey(sid);
+//            return ResponseEntity.ok("Survey deleted successfully");
+//        } catch (SurveyNotFoundException e) {
+//            logger.error("Survey not found: {}", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Survey not found");
+//        } catch (Exception ex) {
+//            logger.error("Error deleting survey: {}", ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }}
 
     @GetMapping("/category/{cid}")
     public List<Survey> getSurveysOfCategory(@PathVariable("cid") int cid)

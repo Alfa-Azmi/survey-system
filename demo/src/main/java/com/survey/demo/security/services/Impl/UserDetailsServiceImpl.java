@@ -1,6 +1,7 @@
-package com.survey.demo.security.services;
+package com.survey.demo.security.services.Impl;
 
 import com.survey.demo.models.surveys.Survey;
+import com.survey.demo.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

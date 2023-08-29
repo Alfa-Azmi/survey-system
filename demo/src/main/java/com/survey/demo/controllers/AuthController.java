@@ -11,11 +11,14 @@ import com.survey.demo.security.services.UserService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -62,29 +65,40 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         logger.info("The /signin endpoint has been reached");
+try {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    List<String> roles = userDetails.getAuthorities().stream()
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+    logger.info("User {} has successfully logged in", loginRequest.getUsername());
+    logger.info("Token successfully generated");
 
-        logger.info("User {} has successfully logged in", loginRequest.getUsername());
-        logger.info("Token successfully generated");
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getFirstName(),
-                userDetails.getLastName(),
-                userDetails.getEmail(),
-                userDetails.getPhone(),
-                roles));
+    return ResponseEntity.ok(new JwtResponse(jwt,
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getFirstName(),
+            userDetails.getLastName(),
+            userDetails.getEmail(),
+            userDetails.getPhone(),
+            roles));
+}catch (BadCredentialsException e) {
+    // Handle invalid credentials (password doesn't match)
+    logger.warn("Passwords don't match");
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(new MessageResponse("Invalid username or password"));
+} catch (UsernameNotFoundException e) {
+    // Handle user not found
+    logger.warn("User not found");
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(new MessageResponse("User not found"));
+}
     }
 
     @PostMapping("/signup")
@@ -152,7 +166,6 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    //get user
     @GetMapping("/")
     public ResponseEntity<?> users(){
         logger.info("Get all the users endpoint reached.");

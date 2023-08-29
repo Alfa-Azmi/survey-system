@@ -5,9 +5,12 @@ import com.survey.demo.security.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
@@ -22,46 +25,122 @@ public class CategoryController {
 
     //add category
 
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PostMapping("/")
+//    public ResponseEntity<Category> addCategory(@RequestBody Category category){
+//        logger.info("Add category endpoint reached. Category name: {}", category.getTitle());
+//
+//        Category category1 = this.categoryService.addCategory(category);
+//         return ResponseEntity.ok(category1);
+//    }
+
+
+    // Exception handling for addCategory
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        logger.error("An exception occurred: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-        logger.info("Add category endpoint reached. Category name: {}", category.getTitle());
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        try {
+            logger.info("Add category endpoint reached. Category name: {}", category.getTitle());
 
-        Category category1 = this.categoryService.addCategory(category);
-         return ResponseEntity.ok(category1);
+            Category category1 = this.categoryService.addCategory(category);
+            return ResponseEntity.ok(category1);
+        } catch (Exception e) {
+            logger.error("Error adding category: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
-    //get category
+//    //get category
+//    @GetMapping("/{categoryId}")
+//    public Category getCategory(@PathVariable("categoryId") int categoryId)
+//    {
+//        logger.info("Get category by ID endpoint reached. Category ID: {}", categoryId);
+//        return this.categoryService.getCategory(categoryId);
+//    }
+
+
     @GetMapping("/{categoryId}")
-    public Category getCategory(@PathVariable("categoryId") int categoryId)
-    {
-        logger.info("Get category by ID endpoint reached. Category ID: {}", categoryId);
-        return this.categoryService.getCategory(categoryId);
+    public ResponseEntity<?> getCategory(@PathVariable("categoryId") int categoryId) {
+        try {
+            logger.info("Get category by ID endpoint reached. Category ID: {}", categoryId);
+            Category category = this.categoryService.getCategory(categoryId);
+            return ResponseEntity.ok(category);
+        } catch (Exception e) {
+            logger.error("Error fetching category: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+//    //get all categories
+//    @GetMapping("/")
+//    public ResponseEntity<?> getCategories(){
+//        logger.info("Get all categories endpoint reached.");
+//        return ResponseEntity.ok(this.categoryService.getCategories());
+//    }
 
-    //get all categories
+
     @GetMapping("/")
-    public ResponseEntity<?> getCategories(){
-        logger.info("Get all categories endpoint reached.");
-        return ResponseEntity.ok(this.categoryService.getCategories());
+    public ResponseEntity<?> getCategories() {
+        try {
+            logger.info("Get all categories endpoint reached.");
+            //List<Category> categories = this.categoryService.getCategories();
+            return ResponseEntity.ok(this.categoryService.getCategories());
+        } catch (Exception e) {
+            logger.error("Error fetching categories: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    //update category
+//    //update category
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PutMapping("/")
+//    public Category updateCategory(@RequestBody Category category)
+//    {
+//        logger.info("Update category endpoint reached. Category ID: {}", category.getCid());
+//        return this.categoryService.updateCategory(category);
+//    }
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/")
-    public Category updateCategory(@RequestBody Category category)
-    {
-        logger.info("Update category endpoint reached. Category ID: {}", category.getCid());
-        return this.categoryService.updateCategory(category);
+    public ResponseEntity<?> updateCategory(@RequestBody Category category) {
+        try {
+            logger.info("Update category endpoint reached. Category ID: {}", category.getCid());
+
+            Category updatedCategory = this.categoryService.updateCategory(category);
+            return ResponseEntity.ok(updatedCategory);
+        } catch (Exception e) {
+            logger.error("Error updating category: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    //delete category
-   @PreAuthorize("hasRole('ADMIN')")
+//    //delete category
+//   @PreAuthorize("hasRole('ADMIN')")
+//    @DeleteMapping("/{categoryId}")
+//    public void deleteCategory(@PathVariable("categoryId") int categoryId)
+//    {
+//        logger.info("Delete category by ID endpoint reached. Category ID: {}", categoryId);
+//        this.categoryService.deleteCategory(categoryId);
+//    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
-    public void deleteCategory(@PathVariable("categoryId") int categoryId)
-    {
-        logger.info("Delete category by ID endpoint reached. Category ID: {}", categoryId);
-        this.categoryService.deleteCategory(categoryId);
+    public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") int categoryId) {
+        try {
+            logger.info("Delete category by ID endpoint reached. Category ID: {}", categoryId);
+            this.categoryService.deleteCategory(categoryId);
+            return ResponseEntity.ok("Category deleted successfully");
+        } catch (Exception e) {
+            logger.error("Error deleting category: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
 
 
 

@@ -9,7 +9,7 @@ FROM openjdk:17-oracle
 WORKDIR /app
 
 # Copy the JAR file of your Spring Boot application into the container
-COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+COPY target/survey-system-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the port on which your Spring Boot application runs
 EXPOSE 8080

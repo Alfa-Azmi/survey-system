@@ -1,8 +1,10 @@
-package com.survey.demo.security.services;
+package com.survey.demo.security.services.Impl;
 
 import com.survey.demo.models.surveys.Question;
 import com.survey.demo.models.surveys.Survey;
 import com.survey.demo.repository.QuestionRepository;
+import com.survey.demo.security.services.QuestionService;
+import com.survey.demo.security.services.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +12,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+//    @Autowired
+//    private QuestionSequenceGenerator questionSequenceGenerator;
+
     @Autowired
-    private QuestionSequenceGenerator questionSequenceGenerator;
+    private SequenceGeneratorService sequenceGeneratorService;
+
     @Override
     public Question addQuestion(Question question) {
         //survey.setSId(surveySequenceGenerator.getSequenceNumber((Survey.SEQUENCE_NAME)));
-        question.setQuesId(questionSequenceGenerator.getSequenceNumber((Question.SEQUENCE_NAME)));
+        question.setQuesId(sequenceGeneratorService.getSequenceNumber((Question.SEQUENCE_NAME)));
         return this.questionRepository.save(question);
     }
 
