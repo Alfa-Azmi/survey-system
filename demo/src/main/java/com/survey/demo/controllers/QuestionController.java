@@ -93,6 +93,7 @@ public class QuestionController {
         this.service.deleteQuestion(quesId);
     }
 
+    //Evaluate the questions of survey
     @PostMapping("/eval-survey")
     public ResponseEntity<?> evalSurvey(@RequestBody List<Question> questions) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

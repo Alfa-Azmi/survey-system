@@ -19,6 +19,8 @@ public interface SurveyService {
     public List<Survey> getActiveSurveys();
     public List<Survey> getActiveSurveysOfCategory(Category c);
 
+    public List<Survey> searchSurvey(String keyword);
+
 
 
 }

@@ -15,10 +15,6 @@ import java.util.Set;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
-
-//    @Autowired
-//    private CategorySequenceGenerator categorySequenceGenerator;
-
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Override
@@ -41,14 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategory (int categoryId) throws CategoryNotFoundException {
         return this.categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException("Category Not Found with categoryId: " + categoryId));
     }
-
-//    @Override
-//    public void deleteCategory(int categoryId) {
-//         Category category= new Category();
-//         category.setCid(categoryId);
-//        this.categoryRepository.delete(category);
-//
-//    }
 
     @Override
     public void deleteCategory(int categoryId) throws CategoryNotFoundException {

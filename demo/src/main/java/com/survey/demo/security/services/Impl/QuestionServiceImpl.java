@@ -15,16 +15,11 @@ import java.util.Set;
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
-
-//    @Autowired
-//    private QuestionSequenceGenerator questionSequenceGenerator;
-
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
     public Question addQuestion(Question question) {
-        //survey.setSId(surveySequenceGenerator.getSequenceNumber((Survey.SEQUENCE_NAME)));
         question.setQuesId(sequenceGeneratorService.getSequenceNumber((Question.SEQUENCE_NAME)));
         return this.questionRepository.save(question);
     }

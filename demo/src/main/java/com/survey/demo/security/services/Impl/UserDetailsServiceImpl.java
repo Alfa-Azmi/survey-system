@@ -29,9 +29,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-
-//    @Override
-//    public Set<Survey> getUsers() {
-//        return new HashSet<>(this.surveyRepository.findAll());
-//    }
 }

@@ -4,6 +4,7 @@ import com.survey.demo.exceptions.CategoryNotFoundException;
 import com.survey.demo.exceptions.SurveyNotFoundException;
 import com.survey.demo.models.surveys.Category;
 import com.survey.demo.models.surveys.Survey;
+import com.survey.demo.repository.ResultRepository;
 import com.survey.demo.repository.SurveyRepository;
 import com.survey.demo.security.services.SequenceGeneratorService;
 import com.survey.demo.security.services.SurveyService;
@@ -20,8 +21,8 @@ public class SurveyServiceImpl implements SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
-//    @Autowired
-//    private SurveySequenceGenerator surveySequenceGenerator;
+    @Autowired
+    private ResultRepository resultRepository;
 
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
@@ -53,16 +54,6 @@ public class SurveyServiceImpl implements SurveyService {
         this.surveyRepository.deleteById(surveyId);
     }
 
-//    @Override
-//    public void deleteSurvey(int surveyId) throws SurveyNotFoundException {
-//        if (!surveyRepository.existsById(surveyId)) {
-//            throw new SurveyNotFoundException("Survey Not Found with surveyId: " + surveyId);
-//        }
-//
-//        surveyRepository.deleteById(surveyId);
-//    }
-
-
     @Override
     public List<Survey> getSurveysOfCategory(Category category) {
         return this.surveyRepository.findBycategory(category);
@@ -79,6 +70,10 @@ public class SurveyServiceImpl implements SurveyService {
         return this.surveyRepository.findByCategoryAndActive(c,true);
     }
 
+    @Override
+    public List<Survey> searchSurvey(String keyword) {
+        return this.surveyRepository.findByTitleContainingIgnoreCase(keyword);
 
+    }
 
 }

@@ -12,14 +12,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import lombok.Data;
-//import lombok.Getter;
-//import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-//import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Document(collection = "users")
@@ -71,8 +68,6 @@ public class User {
     public void setResults(List<Result> results) {
         this.results = results;
     }
-
-
 
     public User(String username, String password, String firstName, String lastName, String email, String phone) {
         this.username = username;

@@ -32,25 +32,6 @@ public class ResultController {
         return ResponseEntity.ok(this.resultservice.addResult(result));
     }
 
-//    @GetMapping("/{sid}/{uid}")
-//    public ResponseEntity<?> getResultByUserAndSurvey(@PathVariable("sid") int sid,@PathVariable("uid") int uid)
-//    {
-//        Survey survey1=new Survey();
-//        survey1.setSId(sid);
-//
-//        User user1=new User();
-//        user1.setId(uid);
-//        System.out.println(sid+" "+ uid);
-//        List<Result> lis=(this.resultservice.getResultOfUserAndSurvey(survey1, user1));
-//        for(Result r:lis)
-//        {
-//            System.out.println(r.getMarksScored());
-//        }
-//        return ResponseEntity.ok(lis);
-//
-//    }
-//
-
     //Get Result By Survey
     @GetMapping("/survey/{surveyID}")
     public List<Result> getResultBySurvey(@PathVariable("surveyID") int surveyID)
@@ -60,6 +41,7 @@ public class ResultController {
 
     }
 
+    //Get Result By UserID and SurveyID
     @GetMapping("/{userID}/{surveyID}")
     public List<Result> getResultByUserIDAndSurveyID(@PathVariable("userID") int userID,
                                                  @PathVariable("surveyID") int surveyID)
@@ -68,7 +50,7 @@ public class ResultController {
         return resultservice.getByUserIDAndSurveyID(userID,surveyID);
     }
 
-
+    //Get Result By UserID
     @GetMapping("/user/{userID}")
     public List<Result> getResultByUserID(@PathVariable("userID") int userID)
     {
@@ -76,6 +58,4 @@ public class ResultController {
         return resultservice.getByUserID(userID);
 
     }
-
-
 }

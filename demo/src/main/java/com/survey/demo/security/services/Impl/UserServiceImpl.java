@@ -19,10 +19,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-//        @Override
-//        public Set<User> getUsers() {
-//        return new HashSet<>(this.userRepository.findAll());
-//    }
 
     public List<UserResponse> getUsers(){
         List<User> users = this.userRepository.findAll();
@@ -34,6 +30,5 @@ public class UserServiceImpl implements UserService {
 
         return updatedUsers;
     }
-
 
 }

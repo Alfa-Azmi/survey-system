@@ -6,8 +6,6 @@ import lombok.Data;
 
 
 @Data
-
-
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
@@ -18,7 +16,6 @@ public class JwtResponse {
     private String email;
     private String phone;
     private List<String> roles;
-
 
     public JwtResponse(String accessToken, int id, String username, String firstName,
                        String lastName, String email, String phone, List<String> roles) {

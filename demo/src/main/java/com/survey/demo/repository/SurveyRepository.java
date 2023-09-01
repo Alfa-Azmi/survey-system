@@ -14,4 +14,7 @@ public interface SurveyRepository extends MongoRepository<Survey,Integer> {
     List<Survey> findByCategoryAndActive(Category c,Boolean b);
 
 
+    List<Survey> findByTitleContainingIgnoreCase(String title);
+
+
 }

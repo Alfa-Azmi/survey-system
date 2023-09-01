@@ -1,12 +1,10 @@
 package com.survey.demo.models.surveys;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,17 +22,14 @@ public class Question {
     private String option2;
     private String option3;
     private String option4;
-
-
     private String answer;
     @Transient
     private String givenAnswer;
 
     @Transient
     private double maxMarks;
-    //@ManyToOne(fetch = FetchType.EAGER)
+
     @DBRef// Use DBRef to create a reference to the Survey document
     private Survey survey;
-
 
 }

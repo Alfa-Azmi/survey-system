@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "db_sequence")
 public class DbSequence {
 
-
     @Id
     private String id;
     private int seq;

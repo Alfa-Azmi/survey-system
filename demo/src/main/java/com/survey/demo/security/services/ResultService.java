@@ -15,10 +15,4 @@ public interface ResultService {
 
     public List<Result> getByUserID(int userID);
 
-    //public List<Result> getByUserAndSurvey(int surveyID,int userID);
-
-//    public List<Result> getAllResult();
-//    public List<Result> getResultOfSurvey(Survey survey);
-//    public List<Result> getResultOfUser(User user);
-//    public List<Result> getResultOfUserAndSurvey(Survey survey,User user);
 }

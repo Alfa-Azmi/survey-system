@@ -34,13 +34,9 @@ public class Survey {
 
     private boolean active = false;
 
-
-   //@ManyToOne(fetch = fetchType.EAGER)
-
-
     @DBRef // Use DBRef to create a reference to the Category document
     private Category category;
-    //@OneToMany(mappedBy = "survey",fetch=FetchType.LAZY,cascade = CascadeType.ALL)
+
     @JsonIgnore
     //@DBRef
     private Set<Question> questions = new HashSet<>();
@@ -55,7 +51,5 @@ public class Survey {
     public void setResults(List<Result> results) {
         this.results = results;
     }
-
-
 
 }

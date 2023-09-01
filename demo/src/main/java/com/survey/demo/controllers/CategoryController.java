@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
-//@CrossOrigin("*")
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CategoryController {
@@ -23,18 +23,6 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    //add category
-
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("/")
-//    public ResponseEntity<Category> addCategory(@RequestBody Category category){
-//        logger.info("Add category endpoint reached. Category name: {}", category.getTitle());
-//
-//        Category category1 = this.categoryService.addCategory(category);
-//         return ResponseEntity.ok(category1);
-//    }
-
-
     // Exception handling for addCategory
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception ex) {
@@ -42,6 +30,7 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
     }
 
+    //To add a category
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
@@ -55,15 +44,8 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-//    //get category
-//    @GetMapping("/{categoryId}")
-//    public Category getCategory(@PathVariable("categoryId") int categoryId)
-//    {
-//        logger.info("Get category by ID endpoint reached. Category ID: {}", categoryId);
-//        return this.categoryService.getCategory(categoryId);
-//    }
 
-
+    //To get a single category
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> getCategory(@PathVariable("categoryId") int categoryId) {
         try {
@@ -75,14 +57,8 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-//    //get all categories
-//    @GetMapping("/")
-//    public ResponseEntity<?> getCategories(){
-//        logger.info("Get all categories endpoint reached.");
-//        return ResponseEntity.ok(this.categoryService.getCategories());
-//    }
 
-
+    //To get the list of categories
     @GetMapping("/")
     public ResponseEntity<?> getCategories() {
         try {
@@ -95,16 +71,7 @@ public class CategoryController {
         }
     }
 
-//    //update category
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PutMapping("/")
-//    public Category updateCategory(@RequestBody Category category)
-//    {
-//        logger.info("Update category endpoint reached. Category ID: {}", category.getCid());
-//        return this.categoryService.updateCategory(category);
-//    }
-
-
+    //To update a category
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/")
     public ResponseEntity<?> updateCategory(@RequestBody Category category) {
@@ -119,15 +86,6 @@ public class CategoryController {
         }
     }
 
-//    //delete category
-//   @PreAuthorize("hasRole('ADMIN')")
-//    @DeleteMapping("/{categoryId}")
-//    public void deleteCategory(@PathVariable("categoryId") int categoryId)
-//    {
-//        logger.info("Delete category by ID endpoint reached. Category ID: {}", categoryId);
-//        this.categoryService.deleteCategory(categoryId);
-//    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable("categoryId") int categoryId) {
@@ -140,9 +98,4 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
-
-
-
 }

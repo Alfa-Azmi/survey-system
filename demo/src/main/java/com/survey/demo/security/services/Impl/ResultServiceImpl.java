@@ -21,9 +21,6 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     private ResultRepository resultrepository;
 
-//    @Autowired
-//    private ResultSequenceGenerator resultSequenceGenerator;
-
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -57,25 +54,4 @@ public class ResultServiceImpl implements ResultService {
         List<Result> results = resultrepository.findByUserID(userID);
         return results;
     }
-
-
-//    @Override
-//    public List<Result> getAllResult() {
-//        return this.resultrepository.findAll();
-//    }
-
-//    @Override
-//    public List<Result> getResultOfSurvey(Survey survey) {
-//        return this.resultrepository.findBySurvey(survey);
-//    }
-//
-//    @Override
-//    public List<Result> getResultOfUser(User user) {
-//        return this.resultrepository.findByUser(user);
-//    }
-//
-//    @Override
-//    public List<Result> getResultOfUserAndSurvey(Survey survey, User user) {
-//        return this.resultrepository.findBySurveyAndUser(survey,user);
-//    }
 }
