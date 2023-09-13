@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -44,5 +45,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException("Category Not Found with categoryId: " + categoryId));
 
         this.categoryRepository.delete(category);
+    }
+
+    @Override
+    public List<Category> searchCategory(String keyword) {
+        return this.categoryRepository.findByTitleContainingIgnoreCase(keyword);
+
     }
 }

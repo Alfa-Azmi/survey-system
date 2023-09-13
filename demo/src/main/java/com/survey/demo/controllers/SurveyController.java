@@ -137,8 +137,6 @@ public class SurveyController {
         }
     }
 
-
-
     //Search Survey
     @GetMapping("/search")
     public ResponseEntity<List<Survey>> searchSurveys(@RequestParam String keyword) {

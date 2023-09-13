@@ -1,6 +1,7 @@
 package com.survey.demo.controllers;
 
 import com.survey.demo.models.surveys.Category;
+import com.survey.demo.models.surveys.Survey;
 import com.survey.demo.security.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +96,19 @@ public class CategoryController {
             return ResponseEntity.ok("Category deleted successfully");
         } catch (Exception e) {
             logger.error("Error deleting category: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    //Search Category
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/search")
+    public ResponseEntity<List<Category>> searchCategories(@RequestParam String keyword) {
+        logger.info("search category endpoint reached.");
+        try {
+            List<Category> searchResults = categoryService.searchCategory(keyword);
+            return ResponseEntity.ok(searchResults);
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
